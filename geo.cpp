@@ -21,8 +21,11 @@ namespace{
 
 std::string city;
 std::string city2;
+std::string apiKey;
 int main(){
     //get city names
+    std::cout <<"Enter your api key: "
+    std::cin >> apiKey;
     std::cout << "Enter a city, state: ";
     std::getline(std::cin, city);
     std::cout << "Enter the second city, state: ";
@@ -31,10 +34,11 @@ int main(){
     std::replace(city.begin(),city.end(),' ','+');
     std::replace(city2.begin(),city2.end(),' ','+');
     //construct the url
-    const std::string apiKey("&key=AIzaSyAng1sL5Qz65EsVnkZezHewgN4dGRxeKfk");
+    const std::string apiKeyAppend("&key=");
+    const std::string apiString = apiKeyAppend+apiKey
     const std::string urlEdit("https://maps.googleapis.com/maps/api/geocode/json?address=");
-    const std::string url1=urlEdit+city+apiKey;
-    const std::string url2=urlEdit+city2+apiKey;
+    const std::string url1=urlEdit+city+apiString;
+    const std::string url2=urlEdit+city2+apiString;
     //std::cout <<url1;
     CURL* curl = curl_easy_init();
     curl_easy_setopt(curl, CURLOPT_URL, url1.c_str());
@@ -52,8 +56,8 @@ int main(){
     curl_easy_cleanup(curl);
 
     if(httpCode==200){
-        json j = json::parse(*httpData);
-        std::cout <<std::setw(4)<<j<<"\n\n";
+        json j1 = json::parse(*httpData);
+        std::cout <<std::setw(4)<<j1<<"\n\n";
     }
     return 0;
 }
